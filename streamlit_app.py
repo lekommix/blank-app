@@ -7,7 +7,7 @@ import tempfile
 
 # Настройки OpenAI
 OPENAI_API_KEY = "sk-..."  # Вставь свой ключ
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=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)
 
 # Функции парсинга
 def extract_text_from_pdf(path):
