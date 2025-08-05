@@ -6,7 +6,7 @@ import os
 import tempfile
 
 # Настройки OpenAI
-OPENAI_API_KEY = "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"  # Вставь свой API-ключ
+OPENAI_API_KEY = "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"  # Вставь свой API-ключ
 PROJECT_ID = "proj_3LFcRXiyy2eIhtVUFDx06BmA"  # Твой ID проекта
 client = OpenAI(api_key=OPENAI_API_KEY, project=PROJECT_ID)
 
