@@ -6,17 +6,11 @@ import os
 import tempfile
 
 # Настройки OpenAI
-OPENAI_API_KEY = "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"  # Вставь свой ключ
-client = OpenAI(api_key=OPENAI_API_KEY)
-project="proj_3LFcRXiyy2eIhtVUFDx06BmA" 
-response = client.responses.create(
-    prompt={
-        "id": "pmpt_68900ac35e7081959fe8c48c9a077aec0eeaf77803903995",
-        "version": "11"
-    }
-)
+OPENAI_API_KEY = "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"  # Вставь свой API-ключ
+PROJECT_ID = "proj_3LFcRXiyy2eIhtVUFDx06BmA"  # Твой ID проекта
+client = OpenAI(api_key=OPENAI_API_KEY, project=PROJECT_ID)
 
-# Функции парсинга
+# --- Функции парсинга текста ---
 def extract_text_from_pdf(path):
     with pdfplumber.open(path) as pdf:
         return '\n'.join([page.extract_text() or '' for page in pdf.pages]).strip()
@@ -41,27 +35,37 @@ def read_file(file):
     else:
         return None
 
-# Интерфейс Streamlit
+# --- Интерфейс Streamlit ---
 st.set_page_config(page_title="Ассистент Битроникс", layout="centered")
 st.title("🤖 Ассистент компании Битроникс")
-st.markdown("Загрузи техническое задание и выбери режим работы:")
+st.markdown("Загрузи техническое задание и получи разбор:")
 
 uploaded_file = st.file_uploader("📎 Загрузите файл (PDF, DOCX, TXT)", type=["pdf", "docx", "txt"])
-mode = st.radio("⚙️ Режим работы:", ["Отправить файл напрямую в OpenAI", "Распарсить текст и отправить как текст"])
 
 if uploaded_file and st.button("🚀 Проанализировать"):
     with st.spinner("Обрабатываю файл..."):
-
-        if mode == "Распарсить текст и отправить как текст":
-            file_text = read_file(uploaded_file)
-            if not file_text:
-                st.error("❌ Не удалось прочитать файл.")
-            else:
+        file_text = read_file(uploaded_file)
+        
+        if not file_text:
+            st.error("❌ Не удалось прочитать файл.")
+        else:
+            try:
+                # GPT-4o, кастомный промпт через system message
                 response = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "Ты — ассистент компании Битроникс. Анализируй ТЗ строго по инструкции. Сначала делай анализ, потом вывод в JSON или текст."},
-                        {"role": "user", "content": file_text}
+                        {
+                            "role": "system",
+                            "content": (
+                                "Ты — ассистент компании Битроникс. "
+                                "Твоя задача — анализировать технические задания строго по инструкции компании. "
+                                "Сначала сделай анализ, затем выведи результат в виде структурированного текста или JSON."
+                            )
+                        },
+                        {
+                            "role": "user",
+                            "content": file_text
+                        }
                     ]
                 )
                 result = response.choices[0].message.content.strip()
@@ -69,21 +73,5 @@ if uploaded_file and st.button("🚀 Проанализировать"):
                 st.text_area("📄 Результат анализа:", result, height=400)
                 st.download_button("💾 Скачать результат как .txt", result, file_name="результат.txt")
 
-        else:  # Отправка файла напрямую
-            ext = os.path.splitext(uploaded_file.name)[-1].lower()
-            with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as tmp:
-                tmp.write(uploaded_file.read())
-                tmp_path = tmp.name
-
-            with open(tmp_path, "rb") as f:
-                response = client.responses.create(
-                    prompt={
-                        "id": "pmpt_68900ac35e7081959fe8c48c9a077aec0eeaf77803903995",
-                        "version": "3"
-                    },
-                    file=f
-                )
-                result = response.content.strip()
-                st.success("✅ GPT-4o обработал файл.")
-                st.text_area("📄 Результат:", result, height=400)
-                st.download_button("💾 Скачать результат как .txt", result, file_name="результат.txt")
+            except Exception as e:
+                st.error(f"🚨 Ошибка при обращении к OpenAI: {e}")
