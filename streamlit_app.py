@@ -6,8 +6,8 @@ import os
 import tempfile
 
 # Настройки OpenAI
-OPENAI_API_KEY = "sk-..."  # Вставь свой ключ
-client = OpenAI(api_key=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)
+OPENAI_API_KEY = "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"  # Вставь свой ключ
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Функции парсинга
 def extract_text_from_pdf(path):
@@ -80,4 +80,3 @@ if uploaded_file and st.button("🚀 Проанализировать"):
                 st.success("✅ GPT-4o обработал файл.")
                 st.text_area("📄 Результат:", result, height=400)
                 st.download_button("💾 Скачать результат как .txt", result, file_name="результат.txt")
-
