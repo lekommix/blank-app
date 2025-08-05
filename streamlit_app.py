@@ -1,3 +1,4 @@
+pip install openai
 import streamlit as st
 from openai import OpenAI
 import pdfplumber
@@ -6,7 +7,7 @@ import os
 import tempfile
 
 # Настройки
-OPENAI_API_KEY = "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"  # Project API Key
+OPENAI_API_KEY = "key"  # Project API Key
 PROJECT_ID = "proj_3LFcRXiyy2eIhtVUFDx06BmA"         # ← ВСТАВЬ СЮДА свой project ID
 PROMPT_ID = "pmpt_68900ac35e7081959fe8c48c9a077aec0eeaf77803903995"
 
