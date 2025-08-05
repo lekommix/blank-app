@@ -6,7 +6,7 @@ import os
 import tempfile
 
 # Настройки
-OPENAI_API_KEY = "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"  # Project API Key
+OPENAI_API_KEY = "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"  # Project API Key
 PROJECT_ID = "proj_3LFcRXiyy2eIhtVUFDx06BmA"         # ← ВСТАВЬ СЮДА свой project ID
 PROMPT_ID = "pmpt_68900ac35e7081959fe8c48c9a077aec0eeaf77803903995"
 
