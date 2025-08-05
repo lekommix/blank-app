@@ -8,6 +8,13 @@ import tempfile
 # Настройки OpenAI
 OPENAI_API_KEY = "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"  # Вставь свой ключ
 client = OpenAI(api_key=OPENAI_API_KEY)
+project="proj_3LFcRXiyy2eIhtVUFDx06BmA" 
+response = client.responses.create(
+    prompt={
+        "id": "pmpt_68900ac35e7081959fe8c48c9a077aec0eeaf77803903995",
+        "version": "11"
+    }
+)
 
 # Функции парсинга
 def extract_text_from_pdf(path):
