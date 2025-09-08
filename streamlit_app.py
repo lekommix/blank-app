@@ -6,7 +6,7 @@ import os
 import tempfile
 
 # Настройки
-
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "sk-proj-...")  # Установите переменную окружения OPENAI_API_KEY
 PROJECT_ID = "proj_3LFcRXiyy2eIhtVUFDx06BmA"         # ← ВСТАВЬ СЮДА свой project ID
 PROMPT_ID = "pmpt_68900ac35e7081959fe8c48c9a077aec0eeaf77803903995"
 
